@@ -41,9 +41,9 @@ jobs:
           sbt clean
           sbt compile
           sbt -mem 4096 -Dis_spark24=true assemblyAndCopy
-      - name: Test Spark NLP in Scala - Apache Spark 2.4.x
-        run: |
-          sbt -mem 4096 -Dis_spark24=true test
+      #- name: Test Spark NLP in Scala - Apache Spark 2.4.x
+      #  run: |
+      #    sbt -mem 4096 -Dis_spark24=true test
       - name: Test Spark NLP in Python - Apache Spark 2.4.x
         run: |
           cd python
