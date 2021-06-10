@@ -45,8 +45,8 @@ jobs:
             ${{ env.img }} \
             bash -exc 'yum install -y curl && \
             uname -m && \
+            yum install python3.7
             python --version && \
-            python -m pip install --upgrade pip && \
             pip install pyspark==2.4.4 numpy && \
             echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list && \
             echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list && \
