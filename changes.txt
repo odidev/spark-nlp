@@ -1,2 +1,2 @@
-docs/en/licensed_release_notes.md
-docs/en/licensed_release_notes.md
+.github/workflows/build_and_test.yml
+.github/workflows/build_and_test.yml
