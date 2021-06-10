@@ -14,63 +14,49 @@ jobs:
 
   spark_armv7_job:
     if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
-    runs-on: ubuntu-18.04
     name: Build and Test on Apache Spark 2.4.x for arm64
-    # The host should always be Linux
+    strategy:
+      matrix:
+        os: [ubuntu-18.04]
+        pyver: [cp37-cp37m, cp38-cp38, cp39-cp39]
+    runs-on: ${{ matrix.os }}
+    env:
+      py: /opt/python/${{ matrix.pyver }}/bin/python
+      img: quay.io/pypa/manylinux2014_aarch64
+      python-version: ${{ matrix.pyver }}    
     
     steps:
-      - uses: actions/checkout@v2.1.0
-      - uses: uraimo/run-on-arch-action@v2.0.5
-        name: Run commands
-        id: runcmd
-        with:
-          arch: armv7
-          distro: ubuntu18.04
-
-          # Not required, but speeds up builds by storing container images in
-          # a GitHub package registry.
-          githubToken: ${{ github.token }}
-
-          # Set an output parameter `uname` for use in subsequent steps
-          run: |
-            uname -a
-            echo ::set-output name=uname::$(uname -a)
-
+      - uses: actions/checkout@v2
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v1
       - name: Set up JDK 8
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      #- name: Install Python 3.7
-      #  uses: actions/setup-python@v2
-      #  with:
-      #    python-version: 3.7.7
-      #    architecture: armv7
-
-      - name: Get the output
-        # Echo the `uname` output parameter from the `runcmd` step
+      - name: Install Python 3.7
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7.7
+          architecture: arm64
+      - name: Install and Run tests
         run: |
-          echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
-      - name: Install Python packages (Python 3.7)
-        run: |
-          uname -m
-          apt-get install python3.7
-          python --version
-          python -m pip install --upgrade pip
-          pip install pyspark==2.4.4 numpy
-      - name: Build Spark NLP on Apache Spark 2.4.x
-        run: |
-          echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
-          echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | sudo tee /etc/apt/sources.list.d/sbt_old.list
-          curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | sudo apt-key add
-          sudo apt-get update
-          sudo apt-get install sbt
-          sbt clean
-          sbt compile
-          sbt -mem 4096 -Dis_spark24=true assemblyAndCopy
-      #- name: Test Spark NLP in Scala - Apache Spark 2.4.x
-      #  run: |
-      #    sbt -mem 4096 -Dis_spark24=true test
-      - name: Test Spark NLP in Python - Apache Spark 2.4.x
-        run: |
-          cd python
-          python3.7 -m run-tests
+          docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+            ${{ env.img }} \
+            bash -exc 'yum install -y curl && \
+            uname -m && \
+            python --version && \
+            python -m pip install --upgrade pip && \
+            pip install pyspark==2.4.4 numpy && \
+            echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list && \
+            echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list && \
+            curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | yum add && \
+            yum update && \
+            yum install sbt && \
+            sbt clean && \
+            sbt compile && \
+            sbt -mem 4096 -Dis_spark24=true assemblyAndCopy && \
+            sbt -mem 4096 -Dis_spark24=true test && \
+            cd python && \
+            python3.7 -m run-tests && \
+            deactivate'
