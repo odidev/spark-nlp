@@ -45,9 +45,14 @@ jobs:
             ${{ env.img }} \
             bash -exc 'yum install -y curl && \
             uname -m && \
-            yum install python3.7
+            yum install gcc openssl-devel bzip2-devel libffi-devel zlib-devel && \
+            wget https://www.python.org/ftp/python/3.7.9/Python-3.7.9.tgz && \
+            tar xzf Python-3.7.9.tgz && \
+            cd Python-3.7.9 && \
+            ./configure --enable-optimizations && \
+            make altinstall && \
             python --version && \
-            pip install pyspark==2.4.4 numpy && \
+            yum install pyspark==2.4.4 numpy && \
             echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list && \
             echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list && \
             curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | yum add && \
