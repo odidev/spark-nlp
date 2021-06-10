@@ -40,11 +40,11 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Install Python 3.7
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.7.7
-          architecture: armv7
+      #- name: Install Python 3.7
+      #  uses: actions/setup-python@v2
+      #  with:
+      #    python-version: 3.7.7
+      #    architecture: armv7
 
       - name: Get the output
         # Echo the `uname` output parameter from the `runcmd` step
@@ -52,6 +52,7 @@ jobs:
           echo "The uname output was ${{ steps.runcmd.outputs.uname }}"
       - name: Install Python packages (Python 3.7)
         run: |
+          python --version
           python -m pip install --upgrade pip
           pip install pyspark==2.4.4 numpy
       - name: Build Spark NLP on Apache Spark 2.4.x
