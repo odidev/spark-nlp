@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-18.04]
-        pyver: [cp37-cp37m, cp38-cp38, cp39-cp39]
+        pyver: [cp37-cp37m]
     runs-on: ${{ matrix.os }}
     env:
       py: /opt/python/${{ matrix.pyver }}/bin/python
@@ -34,11 +34,11 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-      - name: Install Python 3.7
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.7.7
-          architecture: arm64
+      #- name: Install Python 3.7
+      #  uses: actions/setup-python@v2
+      #  with:
+      #    python-version: 3.7.7
+      #    architecture: arm64
       - name: Install and Run tests
         run: |
           docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
