@@ -65,7 +65,7 @@ jobs:
             yum install -y sbt && \
             sbt clean && \
             sbt compile && \
-            sbt -mem 4096 -Dis_spark24=true assemblyAndCopy && \
+            
             sbt -mem 4096 -Dis_spark24=true test && \
             cd python && \
             python3.7 -m run-tests && \
