@@ -51,7 +51,7 @@ jobs:
             cd Python-3.7.9 && \
             ./configure --enable-optimizations && \
             make altinstall && \
-            python3 --version && \
+            python3.7 -V && \
             pip install pyspark==2.4.4 numpy && \
             echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list && \
             echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list && \
