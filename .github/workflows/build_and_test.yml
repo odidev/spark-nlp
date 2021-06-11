@@ -45,7 +45,7 @@ jobs:
             ${{ env.img }} \
             bash -exc 'yum install -y curl && \
             uname -m && \
-            yum install gcc openssl-devel bzip2-devel libffi-devel zlib-devel && \
+            yum install -y gcc openssl-devel bzip2-devel libffi-devel zlib-devel && \
             wget https://www.python.org/ftp/python/3.7.9/Python-3.7.9.tgz && \
             tar xzf Python-3.7.9.tgz && \
             cd Python-3.7.9 && \
