@@ -43,7 +43,7 @@ jobs:
         run: |
           docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
             ${{ env.img }} \
-            bash -exc 'yum install -y curl && \
+            bash -exc 'yum install -y wget curl && \
             uname -m && \
             yum install -y gcc openssl-devel bzip2-devel libffi-devel zlib-devel && \
             wget https://www.python.org/ftp/python/3.7.9/Python-3.7.9.tgz && \
