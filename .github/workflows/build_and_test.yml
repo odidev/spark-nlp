@@ -59,7 +59,6 @@ jobs:
             yum -y update && \
             yum install -y java-1.8.0-openjdk && \
             java -version && \
-            update-alternatives --config java && \
             export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.292.b10-1.el7_9.aarch64/jre/bin/java && \
             echo $JAVA_HOME && \
             curl https://bintray.com/sbt/rpm/rpm | tee /etc/yum.repos.d/bintray-sbt-rpm.repo && \
