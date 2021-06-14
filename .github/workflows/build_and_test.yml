@@ -46,6 +46,7 @@ jobs:
             bash -exc 'yum install -y wget curl && \
             uname -m && \
             yum install -y gcc openssl-devel bzip2-devel libffi-devel zlib-devel && \
+            cd /usr/src && \
             wget https://www.python.org/ftp/python/3.7.9/Python-3.7.9.tgz && \
             tar xzf Python-3.7.9.tgz && \
             cd Python-3.7.9 && \
@@ -67,7 +68,6 @@ jobs:
             sbt compile && \
             
             sbt -mem 4096 -Dis_spark24=true test && \
-            cd .. && \
             pwd && \
             ls && \
             cd python && \
