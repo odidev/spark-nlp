@@ -51,11 +51,8 @@ jobs:
             tar xzf Python-3.7.9.tgz && \
             cd Python-3.7.9 && \
             ./configure --enable-optimizations && \
-            make altinstall && \
+            make install && \
             python3.7 -V && \
-            pwd && \
-            ls && \
-            cd /ws && \
             pwd && \
             ls && \
             python3.7 -m pip install --upgrade pip
@@ -69,8 +66,8 @@ jobs:
             yum install -y sbt && \
             sbt clean && \
             sbt compile && \
-            
-            
+            sbt -mem 4096 -Dis_spark23=true assemblyAndCopy
+            sbt -mem 4096 -Dis_spark23=true test
             pwd && \
             ls && \
             cd python && \
