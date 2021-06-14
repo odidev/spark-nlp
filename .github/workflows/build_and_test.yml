@@ -68,6 +68,7 @@ jobs:
             sbt compile && \
             
             sbt -mem 4096 -Dis_spark23=true test
+            cd /ws
             pwd && \
             ls && \
             cd python && \
