@@ -68,6 +68,9 @@ jobs:
             sbt compile && \
             
             sbt -mem 4096 -Dis_spark23=true test
+            find / -name "python3.7"
+            find / -name "java"
+            find / -name "sbt"
             cd /ws
             pwd && \
             ls && \
