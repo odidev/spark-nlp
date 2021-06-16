@@ -45,6 +45,13 @@ jobs:
             ${{ env.img }} \
             bash -exc 'yum install -y wget curl && \
             uname -m && \
+            yum -y update && \
+            yum install -y java-1.8.0-openjdk && \
+            java -version && \
+            export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.292.b10-1.el7_9.aarch64/jre/bin/java && \
+            echo $JAVA_HOME && \
+            python -V && \
+            
             yum install -y gcc openssl-devel bzip2-devel libffi-devel zlib-devel && \
             cd /usr/src && \
             wget https://www.python.org/ftp/python/3.7.9/Python-3.7.9.tgz && \
@@ -57,11 +64,7 @@ jobs:
             ls && \
             python3.7 -m pip install --upgrade pip
             python3.7 -m pip install pyspark numpy && \
-            yum -y update && \
-            yum install -y java-1.8.0-openjdk && \
-            java -version && \
-            export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.292.b10-1.el7_9.aarch64/jre/bin/java && \
-            echo $JAVA_HOME && \
+            
             curl https://bintray.com/sbt/rpm/rpm | tee /etc/yum.repos.d/bintray-sbt-rpm.repo && \
             yum install -y sbt && \
             sbt clean && \
@@ -74,6 +77,8 @@ jobs:
             cd /ws
             pwd && \
             ls && \
+            python -V && \
+            java -version && \
             cd python && \
             python3.7 -m run-tests && \
             deactivate'
