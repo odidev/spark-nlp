@@ -38,13 +38,18 @@ jobs:
       #  uses: actions/setup-python@v2
       #  with:
       #    python-version: 3.7.7
-      #    architecture: arm64
+      #    architecture: arm64         
+      - name: Install tools
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+            ${{ env.img }} ${{ env.py }} -m pip install -U  pip build
       - name: Install and Run tests
         run: |
-         docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
+          docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
             ${{ env.img }} \
-            bash -exc '\
+            bash -exc '${{ env.py }} -m pip install virtualenv && ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
+            python -m pip install --upgrade pip && \
             yum install -y wget curl && \
             uname -m && \
             yum -y update && \
@@ -52,7 +57,7 @@ jobs:
             java -version && \
             export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.292.b10-1.el7_9.aarch64/jre/bin/java && \
             echo $JAVA_HOME && \
-            python3 -V && \
+            python --version && \
             
             pwd && \
             ls && \
@@ -67,7 +72,7 @@ jobs:
             sbt -mem 4096 -Dis_spark23=true test
             pwd && \
             ls && \
-            python3 -V && \
+            python --version && \
             java -version && \
             cd python && \
             python3.7 -m run-tests && \
