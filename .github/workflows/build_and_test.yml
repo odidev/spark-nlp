@@ -59,7 +59,8 @@ jobs:
             echo $JAVA_HOME && \
             python --version && \
             
-            find / -name "javac"
+            find / -name javac*
+            find / -name javac.exe
             javac -version
             
             pwd && \
