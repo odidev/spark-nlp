@@ -32,6 +32,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pyspark==2.4.4 numpy
+          
+          echo $PATH
+          java --version
+          javac --version
+          echo $JAVA_HOME
       - name: Build Spark NLP on Apache Spark 2.4.x
         run: |
           echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
@@ -42,10 +47,6 @@ jobs:
           sbt clean
           sbt compile
           sbt -mem 4096 -Dis_spark24=true assemblyAndCopy
-          echo $PATH
-          java --version
-          javac --version
-          echo $JAVA_HOME
       #- name: Test Spark NLP in Scala - Apache Spark 2.4.x
       #  run: |
       #    sbt -mem 4096 -Dis_spark24=true test
