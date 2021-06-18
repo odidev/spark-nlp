@@ -57,13 +57,9 @@ jobs:
             whereis java && \
             whereis javac && \
             java -version && \
-            export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.292.b10-1.el7_9.aarch64/jre/bin/java && \
+            export JAVA_HOME=/usr/lib/java && \
             echo $JAVA_HOME && \
             python --version && \
-            
-            find / -name javac*
-            find / -name javac.exe
-            javac -version
             
             pwd && \
             ls && \
