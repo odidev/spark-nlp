@@ -32,11 +32,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pyspark==2.4.4 numpy
-          
-          echo $PATH
-          java --version
-          javac --version
-          echo $JAVA_HOME
       - name: Build Spark NLP on Apache Spark 2.4.x
         run: |
           echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | sudo tee /etc/apt/sources.list.d/sbt.list
@@ -100,10 +95,11 @@ jobs:
             python -m pip install --upgrade pip && \
             whoami && \
             echo $PATH && \
+            su -c "yum install java-1.8.0-openjdk"
+            yum install -y java-1.8.0-openjdk-devel 
             yum install -y wget curl && \
             uname -m && \
-            yum -y update && \
-            yum install -y java-1.8.0-openjdk && \
+            
             whereis java && \
             whereis javac && \
             java -version && \
