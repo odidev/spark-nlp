@@ -50,13 +50,14 @@ jobs:
             ${{ env.img }} \
             bash -exc '${{ env.py }} -m pip install virtualenv && ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
-            python -m pip install --upgrade pip && \
-            whoami && \
-            echo $PATH && \
-            su -c "yum -y install java-1.8.0-openjdk"
-            yum install -y java-1.8.0-openjdk-devel 
+            python -m pip install --upgrade pip && 
+            su -c "yum -y install java-1.8.0-openjdk" && \
+            yum install -y java-1.8.0-openjdk-devel && \
             yum install -y wget curl && \
             uname -m && \
+            \
+            whoami && \
+            echo $PATH && \
             
             whereis java && \
             whereis javac && \
@@ -77,6 +78,10 @@ jobs:
             sbt clean && \
             sbt compile && \
             
+            sbt -mem 4096 assemblyAndCopy && \
+            sbt -mem 4096 test && \
+            sbt -mem 4096 -Dis_spark23=true assemblyAndCopy && \
+            sbt -mem 4096 -Dis_spark23=true test && \
             
             pwd && \
             ls && \
