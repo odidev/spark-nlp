@@ -59,7 +59,7 @@ jobs:
             whereis java && \
             whereis javac && \
             java -version && \
-            export JAVA_HOME=/usr/lib/java && \
+            
             echo $JAVA_HOME && \
             python --version && \
       
