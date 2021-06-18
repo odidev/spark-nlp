@@ -50,7 +50,7 @@ jobs:
             bash -exc '${{ env.py }} -m pip install virtualenv && ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
             python -m pip install --upgrade pip && \
-            sudo echo $PATH && \
+            whoami && \
             echo $PATH && \
             yum install -y wget curl && \
             uname -m && \
