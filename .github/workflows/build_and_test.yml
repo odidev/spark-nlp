@@ -50,6 +50,8 @@ jobs:
             bash -exc '${{ env.py }} -m pip install virtualenv && ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
             python -m pip install --upgrade pip && \
+            sudo echo $PATH && \
+            echo $PATH && \
             yum install -y wget curl && \
             uname -m && \
             yum -y update && \
@@ -60,9 +62,8 @@ jobs:
             export JAVA_HOME=/usr/lib/java && \
             echo $JAVA_HOME && \
             python --version && \
-            
-            sudo echo $PATH && \
-            echo $PATH && \
+      
+
             
             pwd && \
             ls && \
