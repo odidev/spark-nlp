@@ -71,7 +71,7 @@ jobs:
             pwd && \
             ls && \
             python3.7 -m pip install --upgrade pip && \
-            python3.7 -m pip install pyspark numpy && \
+            python3.7 -m pip install pyspark==2.7.5 numpy && \
             
             curl https://bintray.com/sbt/rpm/rpm | tee /etc/yum.repos.d/bintray-sbt-rpm.repo && \
             yum install -y sbt && \
