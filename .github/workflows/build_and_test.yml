@@ -20,13 +20,11 @@ jobs:
     name: Build and Test on Apache Spark 2.4.x for arm64
     strategy:
       matrix:
-        os: [ubuntu-18.04]
         pyver: [cp37-cp37m]
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-18.04
     env:
       py: /opt/python/${{ matrix.pyver }}/bin/python
-      img: quay.io/pypa/manylinux2014_aarch64
-      python-version: ${{ matrix.pyver }}    
+      img: quay.io/pypa/manylinux2014_aarch64  
     
     steps:
       - uses: actions/checkout@v2
@@ -41,28 +39,23 @@ jobs:
       #  uses: actions/setup-python@v2
       #  with:
       #    python-version: 3.7.7
-      #    architecture: arm64         
-      - name: Install tools
-        run: |
-          docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
-            ${{ env.img }} ${{ env.py }} -m pip install -U  pip build
+      #    architecture: arm64   
       - name: Install and Run tests
         run: |
           docker run --rm -v ${{ github.workspace }}:/ws:rw --workdir=/ws \
             ${{ env.img }} \
             bash -exc '${{ env.py }} -m pip install virtualenv && ${{ env.py }} -m venv .env && \
             source .env/bin/activate && \
-            python -m pip install --upgrade pip && 
-            su -c "yum -y install java-1.8.0-openjdk" && \
+            python -m pip install --upgrade pip && \
+            python --version && \
+            yum -y install java-1.8.0-openjdk && \
             yum install -y java-1.8.0-openjdk-devel && \
             yum install -y wget curl && \
             uname -m && \
-            \
+            
             whoami && \
             echo $PATH && \
             
-            whereis java && \
-            whereis javac && \
             java -version && \
             
             echo $JAVA_HOME && \
@@ -72,7 +65,6 @@ jobs:
             
             pwd && \
             ls && \
-            python3.7 -m pip install --upgrade pip && \
             python3.7 -m pip install pyspark numpy && \
             
             curl https://bintray.com/sbt/rpm/rpm | tee /etc/yum.repos.d/bintray-sbt-rpm.repo && \
