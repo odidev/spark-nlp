@@ -97,15 +97,17 @@ jobs:
             
             pwd && \
             ls && \
-            python3.7 -m pip install pyspark numpy && \
+            python -m pip install --upgrade pip && \
+            pip install pyspark==3.2.0 numpy && \
             
             curl https://bintray.com/sbt/rpm/rpm | tee /etc/yum.repos.d/bintray-sbt-rpm.repo && \
-            yum install -y sbt && \
+            yum -y install sbt && \
             sbt clean && \
             sbt compile && \
-        
-            sbt -mem 4096 -Dis_spark23=true assemblyAndCopy && \
+            sbt -mem 4096 -Dis_spark32=true assemblyAndCopy && \
             
+            sbt -mem 4096 -Dis_spark32=true coverage test && \
+              
             pwd && \
             ls && \
             python --version && \
