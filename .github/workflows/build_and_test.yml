@@ -99,9 +99,12 @@ jobs:
             ls && \
             python -m pip install --upgrade pip && \
             pip install pyspark==3.2.0 numpy && \
-            
+             
+            wget http://downloads.lightbend.com/scala/2.11.8/scala-2.11.8.rpm && \
+            yum install -y scala-2.11.8.rpm && \
+             
             curl https://bintray.com/sbt/rpm/rpm | tee /etc/yum.repos.d/bintray-sbt-rpm.repo && \
-            yum -y install sbt && \
+            yum install -y sbt && \
             sbt clean && \
             sbt compile && \
             sbt -mem 4096 -Dis_spark32=true assemblyAndCopy && \
