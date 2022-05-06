@@ -11,10 +11,11 @@ on:
       - 'master'
 
 jobs:
-  spark24:
+  
+  spark32:
     if: "! contains(toJSON(github.event.commits.*.message), '[skip test]')"
     runs-on: macos-latest
-    name: Build and Test on Apache Spark 2.4.x
+    name: Build and Test on Apache Spark 3.2.x
 
     steps:
       - uses: actions/checkout@v2
@@ -30,26 +31,28 @@ jobs:
       - name: Install Python packages (Python 3.7)
         run: |
           python -m pip install --upgrade pip
-          pip install pyspark==2.4.4 numpy
-      - name: Build Spark NLP on Apache Spark 2.4.x
+          pip install pyspark==3.2.0 numpy
+      - name: Build Spark NLP on Apache Spark 3.2.0
         run: |
           brew install sbt
           sbt clean
           sbt compile
-          sbt -mem 4096 -Dis_spark24=true assemblyAndCopy
-      - name: Test Spark NLP in Scala - Apache Spark 2.4.x
+          sbt -mem 4096 -Dis_spark32=true assemblyAndCopy
+      - name: Test Spark NLP in Scala - Apache Spark 3.2.x
         run: |
-          sbt -mem 4096 -Dis_spark24=true test
-      - name: Test Spark NLP in Python - Apache Spark 2.4.x
+          sbt -mem 4096 -Dis_spark32=true coverage test
+      - name: Upload coverage data to Coveralls
+        run: sbt coverageReport coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_FLAG_NAME: Apache Spark 3.2.x - Scala 2.12
+      - name: Test Spark NLP in Python - Apache Spark 3.2.x
         run: |
           cd python
           python3.7 -m run-tests
-  
-  
-  
   spark_armv64_job:
     if: "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
-    name: Build and Test on Apache Spark 2.4.x for arm64
+    name: Build and Test on Apache Spark 3.2.x for arm64
     strategy:
       matrix:
         pyver: [cp37-cp37m]
@@ -97,13 +100,16 @@ jobs:
             
             pwd && \
             ls && \
-            python -m pip install --upgrade pip && \
-            pip install pyspark==3.2.0 numpy && \
+            python3 -m pip install --upgrade pip && \
+            python3 -m pip install pyspark==3.2.0 numpy && \
+            whereis pyspark && \
+
+
              
-            wget http://downloads.lightbend.com/scala/2.11.8/scala-2.11.8.rpm && \
-            yum install -y scala-2.11.8.rpm && \
-             
-            curl https://bintray.com/sbt/rpm/rpm | tee /etc/yum.repos.d/bintray-sbt-rpm.repo && \
+
+            rm -f /etc/yum.repos.d/bintray-rpm.repo && \
+            curl -L https://www.scala-sbt.org/sbt-rpm.repo > sbt-rpm.repo && \
+            mv sbt-rpm.repo /etc/yum.repos.d/ && \
             yum install -y sbt && \
             sbt clean && \
             sbt compile && \
@@ -118,5 +124,3 @@ jobs:
             cd python && \
             python3.7 -m run-tests && \
             deactivate'
-
- 
